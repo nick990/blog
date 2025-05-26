@@ -1,20 +1,18 @@
 class ArticlesController < ApplicationController
+  before_action :set_includes, only: [ :index, :show ]
   before_action :set_article, only: [ :show,  :update, :destroy ]
+
   def index
     @articles = Article.all
-    includes = params_includes
-    Rails.logger.info "Controller includes: #{includes.inspect}"
-    @articles = @articles.includes(includes) if includes.any?
+    @articles = @articles.includes(@includes)
     render json: @articles,
-          include_list:  includes
+          include_list:  @includes
     # adapter: :json_api
   end
 
   def show
-    includes = params_includes
-    Rails.logger.info "Controller includes: #{includes.inspect}"
     render json: @article,
-           include_list:  includes
+           include_list:  @includes
     #  adapter: :json_api
   end
 
@@ -42,18 +40,15 @@ class ArticlesController < ApplicationController
   private
 
   def set_article
-    includes = params_includes
-    @article = Article.includes(includes).find(params[:id])
+    @article = Article.includes(@includes).find(params[:id])
+  end
+
+  def set_includes
+    @includes = params[:include]&.split(",")&.map(&:to_sym) || []
   end
 
   def article_params
     params.require(:article).permit(:title, :body)
   end
 
-  # TODO:
-  # - definire var instanza
-  # - definire un meccanismo simile a strong parameters per i parametri di include
-  def params_includes
-    params[:include]&.split(",")&.map(&:to_sym) || []
-  end
 end
