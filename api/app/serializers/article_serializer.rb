@@ -20,8 +20,13 @@
 class ArticleSerializer < ActiveModel::Serializer
   attributes :id, :title, :body
   has_many :comments, if: :include_comments?
-
+  belongs_to :author, if: :include_author?
+  
   def include_comments?
     instance_options[:include_list]&.include?(:comments)
+  end
+
+  def include_author?
+    instance_options[:include_list]&.include?(:author)
   end
 end
