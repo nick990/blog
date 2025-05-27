@@ -1,13 +1,12 @@
 class CommentsController < ApplicationController
   before_action :set_article
-
+  before_action :set_comment, only: [ :show, :destroy ]
   def index
     @comments = @article.comments
     render json: @comments
   end
 
   def show
-    @comment = @article.comments.find(params[:id])
     render json: @comment
   end
 
@@ -21,7 +20,6 @@ class CommentsController < ApplicationController
   end
 
   def destroy
-    @comment = @article.comments.find(params[:id])
     @comment.destroy
   end
 
@@ -29,6 +27,10 @@ class CommentsController < ApplicationController
 
   def set_article
     @article = Article.find(params[:article_id])
+  end
+
+  def set_comment
+    @comment = @article.comments.find(params[:id])
   end
 
   def comment_params
