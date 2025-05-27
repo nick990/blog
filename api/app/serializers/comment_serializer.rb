@@ -17,6 +17,6 @@
 #
 #  article_id  (article_id => articles.id)
 #
-class CommentSerializer < ActiveModel::Serializer
+class CommentSerializer < BaseSerializer
   attributes :id, :commenter, :body
 end

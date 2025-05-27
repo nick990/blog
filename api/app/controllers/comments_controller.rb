@@ -3,11 +3,11 @@ class CommentsController < ApplicationController
   before_action :set_comment, only: [ :show, :destroy ]
   def index
     @comments = @article.comments
-    render json: @comments
+    render json: CommentSerializer.new(@comments).serializable_hash
   end
 
   def show
-    render json: @comment
+    render json: CommentSerializer.new(@comment).serializable_hash
   end
 
   def create

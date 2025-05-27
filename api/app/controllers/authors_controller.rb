@@ -3,11 +3,11 @@ class AuthorsController < ApplicationController
 
   def index
     @authors = Author.all
-    render json: @authors
+    render json: AuthorSerializer.new(@authors).serializable_hash
   end
 
   def show
-    render json: @author
+    render json: AuthorSerializer.new(@author).serializable_hash
   end
 
   def create

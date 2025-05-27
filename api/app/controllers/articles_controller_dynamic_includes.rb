@@ -1,13 +1,19 @@
 class ArticlesController < ApplicationController
+  before_action :set_includes, only: [ :index, :show ]
   before_action :set_article, only: [ :show,  :update, :destroy ]
 
   def index
     @articles = Article.all
-    render json: ArticleSerializer.new(@articles).serializable_hash
+    @articles = @articles.includes(@includes)
+    render json: @articles,
+          include_list:  @includes
+    # adapter: :json_api
   end
 
   def show
-    render json: ArticleSerializer.new(@article).serializable_hash
+    render json: @article,
+           include_list:  @includes
+    #  adapter: :json_api
   end
 
   def create
@@ -34,7 +40,11 @@ class ArticlesController < ApplicationController
   private
 
   def set_article
-    @article = Article.find(params[:id])
+    @article = Article.includes(@includes).find(params[:id])
+  end
+
+  def set_includes
+    @includes = params[:include]&.split(",")&.map(&:to_sym) || []
   end
 
   def article_params

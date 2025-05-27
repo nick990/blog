@@ -1,4 +1,3 @@
-class AuthorSerializer < ActiveModel::Serializer
+class AuthorSerializer < BaseSerializer
   attributes :id, :name
-  has_many :articles
 end
