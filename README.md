@@ -1,6 +1,6 @@
 # blog
 
-monorepo rails + vue
+monorepo rails + vue2
 
 # TODO
 
