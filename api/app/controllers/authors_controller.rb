@@ -3,6 +3,9 @@ class AuthorsController < ApplicationController
 
   def index
     @authors = Author.all.order(sorting_params_parsed)
+    filtering_params_parsed.each do |key, value|
+      @authors = @authors.where(key => value)
+    end
     render json: AuthorSerializer.new(@authors).serializable_hash
   end
 

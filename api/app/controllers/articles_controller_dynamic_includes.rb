@@ -5,6 +5,7 @@ class ArticlesController < ApplicationController
   def index
     @articles = Article.all
     @articles = @articles.includes(@includes)
+   
     render json: @articles,
           include_list:  @includes
     # adapter: :json_api

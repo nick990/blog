@@ -8,4 +8,5 @@ class ApplicationRecord < ActiveRecord::Base
   def resource_link
     "/#{resource_name}/#{self.id}"
   end
+
 end

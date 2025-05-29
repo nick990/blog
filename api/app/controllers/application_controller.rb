@@ -20,8 +20,27 @@ class ApplicationController < ActionController::API
     ordering
   end
 
+  # Parse the filtering params  
+  # Example:
+  # GET /authors?filter[name]=John&filter[id]=1
+  # Returns:
+  # { name: "John", id: 1 }
+  # If no filtering params are provided, return an empty hash
+  def filtering_params_parsed
+    filtering = {}
+    return filtering unless filtering_params
+    filtering_params.each do |key, value|
+      filtering[key.to_sym] = value
+    end
+    filtering
+  end
+
   private
   def sorting_params
     params[:sort]
+  end
+
+  def filtering_params
+    params[:filter]
   end
 end

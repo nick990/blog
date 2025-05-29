@@ -3,6 +3,9 @@ class ArticlesController < ApplicationController
 
   def index
     @articles = Article.all.order(sorting_params_parsed)
+    filtering_params_parsed.each do |key, value|
+      @articles = @articles.where(key => value)
+    end
     render json: ArticleSerializer.new(@articles).serializable_hash
   end
 
