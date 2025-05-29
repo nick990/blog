@@ -2,7 +2,7 @@ class ArticlesController < ApplicationController
   before_action :set_article, only: [ :show,  :update, :destroy ]
 
   def index
-    @articles = Article.all
+    @articles = Article.all.order(sorting_params_parsed)
     render json: ArticleSerializer.new(@articles).serializable_hash
   end
 

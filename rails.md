@@ -98,3 +98,44 @@ Gemma: `active-model-serializer`.
 Gemma: `jsonapi-serializer`
 
 Repo: [github.com/jsonapi-serializer/jsonapi-serializer](https://github.com/jsonapi-serializer/jsonapi-serializer)
+
+## JSON API
+
+Proposta di standard per la serializzazione di dati JSON.
+
+```json
+{
+  "data": {
+    "id": "1",
+    "type": "article",
+    "attributes": {
+      "id": 1,
+      "title": "First article",
+      "body": "This is my first article!"
+    },
+    "relationships": {
+      //Belongs to
+      "author": {
+        "data": {
+          "id": "9",
+          "type": "author"
+        },
+        "links": {
+          "related": "/authors/9"
+        }
+      },
+      "comments": {
+        "meta": {
+          "count": 0
+        },
+        "links": {
+          "related": "/articles/2/comments"
+        }
+      }
+    },
+    "links": {
+      "self": "/articles/1"
+    }
+  }
+}
+```

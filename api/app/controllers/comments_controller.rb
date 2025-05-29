@@ -2,7 +2,7 @@ class CommentsController < ApplicationController
   before_action :set_article
   before_action :set_comment, only: [ :show, :destroy ]
   def index
-    @comments = @article.comments
+    @comments = @article.comments.order(sorting_params_parsed)
     render json: CommentSerializer.new(@comments).serializable_hash
   end
 
