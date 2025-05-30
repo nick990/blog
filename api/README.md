@@ -1,6 +1,6 @@
 # Resftul
 
-Fornisce metodi di utilita sui modelli per implementare Restful API.
+Fornisce metodi di utilità sui modelli per implementare Restful API.
 
 ```ruby
 class Article < ApplicationRecord
@@ -45,7 +45,7 @@ class BaseSerializer
 end
 ```
 
-Esempio:
+Risposta JSON:
 
 ```json
 {
