@@ -21,6 +21,7 @@ module Sortable
   end
 
 
+  # Parse the sorting params
   # Example:
   # GET /authors?sort=name,-id,+created_at
   # Returns:

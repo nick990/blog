@@ -5,16 +5,7 @@ class AuthorsController < ApplicationController
   
   def index
     @authors = Author.all.order(sorting_params_parsed)
-    filtering_params_parsed.each do |key, value|
-      operator = value.keys.first
-      filter_value = value[operator]
-      case operator
-        when :eq
-          @authors = @authors.where(key => filter_value)
-        when :neq
-          @authors = @authors.where.not(key => filter_value)   
-      end
-    end
+    @authors = filter_entities(@authors)
     render json: AuthorSerializer.new(@authors).serializable_hash
   end
 
