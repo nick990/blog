@@ -9,7 +9,7 @@ class ArticleSerializer < BaseSerializer
   
   has_many :comments, lazy_load_data: true, links: {
     related: ->(object) {
-      object.resource_link + '/comments'
+      object.resource_link + "/" + Comment.resource_name
     }
   }, meta: ->(object, params) {
     { count: object.comments.count }

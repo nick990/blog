@@ -1,24 +1,71 @@
-# README
+# Resftul
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Fornisce metodi di utilita sui modelli per implementare Restful API.
 
-Things you may want to cover:
+```ruby
+class Article < ApplicationRecord
+    include Restful
+end
 
-* Ruby version
+class Author < ApplicationRecord
+    include Restful
 
-* System dependencies
+    def self.resource_name
+        "aaaaaaauthors"
+    end
+end
 
-* Configuration
+```
 
-* Database creation
+```ruby
+Article.resource_name
+# => "articles"
 
-* Database initialization
+Author.resource_name
+# => "aaaaaaauthors"
 
-* How to run the test suite
+art = Article.new
+art.resource_link
+# => "/articles/1"
 
-* Services (job queues, cache servers, search engines, etc.)
+aut = Author.new
+aut.resource_link
+# => "/aaaaaaauthors/1"
+```
 
-* Deployment instructions
+Può essere usato nei serializers per generare i link alle risorse.
 
-* ...
+```ruby
+class BaseSerializer
+  include JSONAPI::Serializer
+
+  link :self do |object|
+    object.resource_link
+  end
+end
+```
+
+Esempio:
+
+```json
+{
+  "data": [
+    {
+      "id": "2",
+      "type": "article",
+      "attributes": {
+        "id": 2,
+        "title": "A new article",
+        "body": "This is the body of the article"
+      },
+      "links": {
+        "self": "/articles/2"
+      }
+    }
+  ]
+}
+```
+
+# Filterable
+
+# Sortable
