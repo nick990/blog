@@ -1,6 +1,8 @@
 class AuthorsController < ApplicationController
   before_action :set_author, only: [ :show, :update, :destroy ]
-
+  
+  sortable default: {name: :asc}
+  
   def index
     @authors = Author.all.order(sorting_params_parsed)
     filtering_params_parsed.each do |key, value|
