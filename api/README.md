@@ -69,3 +69,80 @@ Risposta JSON:
 # Filterable
 
 # Sortable
+
+Fornisce metodi di utilità per passare l'ordinamento nel query param `sort`.
+
+```bash
+# Formato query param
+sort=field1,+field2,-field3
+# => ORDER BY field1 asc, field2 asc, field3 desc
+# + : ASC (opzionale)
+# - : DESC
+```
+
+## USAGE
+
+```ruby
+class ApplicationController < ActionController::API
+  include Sortable
+end
+
+
+class AuthorsController < ApplicationController
+  sortable default: {name: :asc}
+
+  def index
+    @authors = Author.all.order(sorting_params_parsed)
+    render json: AuthorSerializer.new(@authors).serializable_hash
+  end
+
+end
+```
+
+**Ordinamento di default**
+
+È possibile definire un ordinamento di default per un controller.<br>
+Se non specificato, viene usato l'ordinamento per `id DESC`.
+L'ordinamento di default viene usato se non viene passata nessuna regola di ordinamento nei params.<br>
+
+**Ordinamento di fallback**
+
+Se nelle regole di ordinamento da applicare non è presente il campo `id`, viene aggiunto in coda l'ordinamento di fallback: `id DESC`.<br>
+Viene aggiunto anche all'ordinamento di default.<br>
+
+## Esempi
+
+```ruby
+class ApplicationController < ActionController::API
+  include Sortable
+end
+
+class AuthorsController < ApplicationController
+    sortable default: {name: :asc}
+    # DEFAULT : name asc, id desc
+    # FALLBACK : id desc
+end
+
+class ArticlesController < ApplicationController
+    # DEFAULT : id desc
+    # FALLBACK : id desc
+end
+
+# Esempi di richieste
+
+[GET] /authors
+# => Order by name asc, id desc
+# Il fallback viene aggiunto al default
+
+[GET] /authors?sort=-created_at
+# =>Order by name created_at desc, id desc
+# Il fallback viene aggiunto all'ordinamento passato
+
+[GET] /authors?sort=-name,id
+# => Order by name desc, id asc
+# Il fallback non viene aggiunto, perché l'id è presente nell'ordinamento passato
+
+[GET] /articles
+# => Order by id desc
+# default = fallback
+```
