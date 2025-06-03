@@ -9,9 +9,7 @@
 #
 
 one:
-  name: MyString
-  articles: one
+  name: Alice
 
 two:
-  name: MyString
-  articles: two
+  name: Bob
