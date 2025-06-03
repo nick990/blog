@@ -68,9 +68,95 @@ Risposta JSON:
 
 # Filterable
 
+Consente di definire i filtri nel query param `filter`.
+
+```bash
+# Formato query param
+filter[field][operator?]=value
+# Esempi
+filter[name]=John
+filter[id]=1
+filter[price][gte]=100 # price >= 100
+filter[price][lte]=100 # price <= 100
+```
+
+## Operatori
+
+Gli operatori sono mappati sui metodi Arel.
+
+- `eq` (default)
+  <br>Se non specificato, viene usato l'operatore `eq`.
+  ```bash
+  # Esempio:
+  filter[name]=John
+  filter[name][eq]=John
+  ```
+- `neq`
+  ```bash
+  # Esempio:
+  filter[name][neq]=John
+  ```
+- `gt`
+  ```bash
+  # Esempio:
+  filter[price][gt]=100
+  ```
+- `gte`
+  ```bash
+  # Esempio:
+  filter[price][gte]=100
+  ```
+- `lt`
+  ```bash
+  # Esempio:
+  filter[price][lt]=100
+  ```
+- `lte`
+  ```bash
+  # Esempio:
+  filter[price][lte]=100
+  ```
+- `in`
+  ```bash
+  # Esempio:
+  filter[name][in]=John,Jane,Jim
+  ```
+- `not_in`
+  ```bash
+  # Esempio:
+  filter[name][not_in]=John,Jane,Jim
+  ```
+- `like`
+  ```bash
+  # Esempio:
+  filter[name][like]=John
+  filter[name][like]=%oh%
+  ```
+- `not_like`
+  ```bash
+  # Esempio:
+  filter[name][not_like]=John
+  filter[name][not_like]=%oh%
+  ```
+
+## Usage
+
+```ruby
+class AuthorsController < ApplicationController
+  include Filterable
+
+  def index
+    @authors = filter_entities(@Author.all)
+    render json: AuthorSerializer.new(@authors).serializable_hash
+  end
+
+end
+
+```
+
 # Sortable
 
-Fornisce metodi di utilità per passare l'ordinamento nel query param `sort`.
+Consente di definire l'ordinamento nel query param `sort`.
 
 ```bash
 # Formato query param
@@ -97,6 +183,16 @@ class AuthorsController < ApplicationController
   end
 
 end
+
+# Esemtpi di richieste
+
+[GET] /authors?filter[name]=John&filter[age][gt]=20
+# => SELECT * FROM authors WHERE name = 'John' AND age > 20
+
+[GET] /authors?filter[name][in]=John,Jane,Jim
+# => SELECT * FROM authors WHERE name IN ('John', 'Jane', 'Jim')
+
+
 ```
 
 **Ordinamento di default**
